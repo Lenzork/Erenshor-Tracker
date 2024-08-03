@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using UnityEngine;
+
+public class PlayerTracker
+{
+    private readonly HttpClient _httpClient;
+    private readonly string _baseUrl;
+
+    public PlayerTracker(string baseUrl)
+    {
+        _baseUrl = baseUrl;
+        _httpClient = new HttpClient();
+    }
+
+    public async Task<int?> GetPlayerIdAsync(string playerName)
+    {
+        var url = $"{_baseUrl}/players?name={playerName}";
+        var response = await _httpClient.GetAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var players = JsonConvert.DeserializeObject<List<Player>>(jsonResponse);
+
+            // Angenommen, der Spielername ist eindeutig und wir wollen nur den ersten Treffer
+            var player = players.FirstOrDefault();
+            return player?.Id;
+        }
+
+        return null;
+    }
+
+    public async Task UpdatePlayerAsync(Player player)
+    {
+        try
+        {
+            var url = $"{_baseUrl}/players/{player.Id}"; // PUT an api/players/{id}
+            var json = JsonConvert.SerializeObject(player);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync(url, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Player updated successfully.");
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to update player. Status Code: {response.StatusCode}, Error: {errorMessage}");
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine($"Request error: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"General error: {e.Message}");
+        }
+    }
+
+
+    public async Task PostPlayerAsync(Player player)
+    {
+        try
+        {
+            var url = $"{_baseUrl}/players"; // POST an api/players
+            var json = JsonConvert.SerializeObject(player);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(url, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Player posted successfully.");
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to post player. Status Code: {response.StatusCode}, Error: {errorMessage}");
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine($"Request error: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"General error: {e.Message}");
+        }
+    }
+
+
+
+}
+
+public class Player
+{
+    public int? Id { get; set; } // Auto-incremented field
+    public string Name { get; set; }
+    public string CharacterClass { get; set; }
+    public int Level { get; set; }
+    public bool IsAlive { get; set; }
+    public DateTime LastUpdated { get; set; }
+}
