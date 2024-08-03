@@ -56,7 +56,7 @@ namespace Erenshor_Tracker.Core.Classes
 
         public async Task<string> UpdateCharacterAsync(Player ply)
         {
-            var url = "http://localhost:3000/updateCharacter";
+            var url = "http://45.145.225.103:3000/updateCharacter";
             var characterData = new
             {
                 steamName = ply.SteamName,
@@ -85,7 +85,7 @@ namespace Erenshor_Tracker.Core.Classes
 
         public async Task<List<Player>> GetPlayersAsync()
         {
-            var url = "http://localhost:3000/getPlayers";
+            var url = "http://45.145.225.103:3000/getPlayers";
             var response = await client.GetStringAsync(url);
 
             var settings = new JsonSerializerSettings

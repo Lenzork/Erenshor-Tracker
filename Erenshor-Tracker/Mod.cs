@@ -21,7 +21,7 @@ namespace Erenshor_Tracker
 
         public override void OnApplicationStart()
         {
-            _playerTracker = new PlayerTracker("http://localhost:3000/addCharacter");
+            _playerTracker = new PlayerTracker("http://45.145.225.103:3000/addCharacter");
             _lastUpdate = DateTime.UtcNow;
         }
 
