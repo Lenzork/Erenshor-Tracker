@@ -47,7 +47,6 @@ namespace Erenshor_Tracker.Core.Classes
                 if (foundMod != null)
                 {
                     var info = foundMod.Info;
-                    MelonLogger.Msg($"{info.Name}, {info.Version}");
                     string emoji;
 
                     switch (info.Name)
@@ -68,7 +67,6 @@ namespace Erenshor_Tracker.Core.Classes
 
                     installedMods.Add(new InstalledMod(info.Name, info.Version, emoji));
                 }
-                MelonLogger.Msg($"Checking {mod}...");
             }
 
             return installedMods;
