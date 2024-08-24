@@ -25,7 +25,7 @@ Once installed, the mod tracks the following values for each player:
 
 ## 🌐 Data Display
 
-All tracked data is displayed on a web page. Visit [http://25506-31251.pph-server.de:3000/](http://25506-31251.pph-server.de:3000/) to view your statistics.
+All tracked data is displayed on a web page. Visit **removed due to low usage** to view your statistics.
 
 ## ❓ FAQ
 
